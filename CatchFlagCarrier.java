@@ -6,8 +6,8 @@ public class CatchFlagCarrier extends Player{
 // constructor (it's the same as the deafult dummy player
     public CatchFlagCarrier(Field f, int side, String name, int number, String team,char symbol, double x, double y){
     super(f, side, name, number, team, symbol, x, y);
-    this.speedX = Math.random()*4-2;
-    this.speedY = Math.random()*4-2;
+    this.speedX = 0;
+    this.speedY = 0;
     }
   
 
@@ -18,7 +18,7 @@ public class CatchFlagCarrier extends Player{
       
       Player a = this;
       int[] coordinates = {0, 0};
-      Player b;
+      Player b = null;
       
       // the purpose of the player is to go after the player if(f) they have the flag.
       // check what team the player is on 
@@ -37,8 +37,7 @@ public class CatchFlagCarrier extends Player{
           
           //check if the player at index i has picked up the flag 
           if (field.pickUpFlag(b) == true){
-         
-           
+            
           // saves the coordinates of the flag into a variable
             coordinates = field.getFlag1Position();
           } 
@@ -57,48 +56,42 @@ public class CatchFlagCarrier extends Player{
           if (field.pickUpFlag(b) == true){
             
           // saves the coordinates of the flag into a variable
-            field.getFlag2Position();
+            coordinates = field.getFlag2Position();
 
           }
         }
       }
       
+
       
       
 //Player movement behavior
 // move towards the coordinates
-// this assumes that the player is moving in the right direction to begin with.
+//the distance between the x coordinates of the player and the flag 
+  
+      double mX = coordinates[0] - this.x;
 
-// For the horizontal movement
-//if the current position (X) is less than the coordinate move towards it
-      if (this.x < coordinates[0]){
-      this.x +=this.speedX;
-      }
+//the distance between the y coordinates of the player and the flag 
+      double mY = coordinates[1] - this.y;
       
-//if the current position (X) is greater than the coordinate move back towards it 
-      if (this.x > coordinates[0]){
-      this.x +=this.speedX*-1;
+      if(mX > 0){
+        mX = 2;
       }
-//if the current position (X) is within acceptable range (+-10) stop moving 
+      if(mX < 0){
+      mX = -2;
+      }
+      if(mY > 0){
+        mY = 2;
+      }
+      if(mY < 0){
+      mY = -2;
+      }
+    
+      this.speedX = mX;
+    
+      this.speedY = mY;
+    
       
-      if (this.x == coordinates[0] || this.x <= coordinates[0]+10 && this.x >= coordinates[0]-10){
-      this.speedX =0;
-      }
-
-// For the vertical movement
-//if the current position (X) is less than the coordinate move towards it      
-      if (this.y < coordinates[1]){
-      this.y +=this.speedX;
-      }
-      
-//if the current position (X) is greater than the coordinate move back towards it       
-      if (this.y > coordinates[1]){
-      this.y +=this.speedY*-1;
-      }
-//if the current position (X) is within acceptable range (+-10) stop moving 
-      if (this.y == coordinates[0] || this.y <= coordinates[0]+10 && this.y >= coordinates[0]-10){
-      this.speedY =0;
-      }
       
 // behavior so that the player will not go out of bounds (right now it rests their position and gives them a new random speed.    
       if (this.x < field.minX+2 || this.x > field.maxX - 25|| this.y < field.minY+ 2 || this.y > field.maxY - 25){
@@ -123,6 +116,7 @@ public class CatchFlagCarrier extends Player{
       this.speedX = Math.random()*4-2;
       this.speedY = Math.random()*4-2;
       }
+      update(field);
       }
 
    
